@@ -208,6 +208,7 @@
   function participantBody() {
     return {
       session_id: S.sessionId,
+      code: S.code,
       consent: true,
       demographics: S.demographics,
       user_agent: String(navigator.userAgent || '').slice(0, 500),
@@ -264,16 +265,21 @@
       controller = new AbortController();
       timer = setTimeout(function () { controller.abort(); }, 15000);
     }
+    var headers = {
+      'Content-Type': 'application/json',
+      'apikey': CFG.supabaseAnonKey,
+      'Prefer': 'resolution=ignore-duplicates,return=minimal'
+    };
+    // Legacy anon/service keys are JWTs and also go in Authorization.
+    // New sb_publishable_... keys are NOT JWTs and must stay in apikey only.
+    if (/^eyJ/.test(CFG.supabaseAnonKey)) {
+      headers['Authorization'] = 'Bearer ' + CFG.supabaseAnonKey;
+    }
     return fetch(url, {
       method: 'POST',
       mode: 'cors',
       keepalive: !!keepalive,
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': CFG.supabaseAnonKey,
-        'Authorization': 'Bearer ' + CFG.supabaseAnonKey,
-        'Prefer': 'resolution=ignore-duplicates,return=minimal'
-      },
+      headers: headers,
       body: JSON.stringify(row.body),
       signal: controller ? controller.signal : undefined
     }).then(function (res) {
