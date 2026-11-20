@@ -257,8 +257,7 @@
 
   function postRow(row, keepalive) {
     var base = String(CFG.supabaseUrl || '').replace(/\/+$/, '');
-    var conflict = row.table === 'participants' ? 'session_id' : 'submission_id';
-    var url = base + '/rest/v1/' + row.table + '?on_conflict=' + conflict;
+    var url = base + '/rest/v1/' + row.table;
     var controller = null;
     var timer = null;
     if (!keepalive && typeof AbortController === 'function') {
@@ -268,7 +267,7 @@
     var headers = {
       'Content-Type': 'application/json',
       'apikey': CFG.supabaseAnonKey,
-      'Prefer': 'resolution=ignore-duplicates,return=minimal'
+      'Prefer': 'return=minimal'
     };
     // Legacy anon/service keys are JWTs and also go in Authorization.
     // New sb_publishable_... keys are NOT JWTs and must stay in apikey only.
@@ -283,6 +282,9 @@
       body: JSON.stringify(row.body),
       signal: controller ? controller.signal : undefined
     }).then(function (res) {
+      // 409 = unique violation (session_id / submission_id already stored).
+      // This is the success case for a retried row whose first response
+      // was lost. Deliberately no on_conflict/upsert: anon has no SELECT.
       if (res.ok || res.status === 409) return true;
       return res.text().then(function (text) {
         throw new Error('HTTP ' + res.status + (text ? ' ' + text.slice(0, 140) : ''));
