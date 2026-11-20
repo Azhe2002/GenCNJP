@@ -24,9 +24,9 @@
   var TASK_DESC = {
     id: '看整行图里红框标出的格子，判断它写成了假名、原来的熟字、都不像，还是空白。约 10 分钟。',
     dak: '只看带浊点／半浊点的假名：右上角的两点或小圈是否完整。约 4 分钟。',
-    nat: '两张同位置的图，分别打 1–5 分自然度。约 20 分钟。'
+    nat: '从 69 对里抽 5 对做自然度 sanity check，左右各打 1–5 分。约 2 分钟。'
   };
-  var TASK_MINUTES = { id: '约 10 分钟', dak: '约 4 分钟', nat: '约 20 分钟' };
+  var TASK_MINUTES = { id: '约 10 分钟', dak: '约 4 分钟', nat: '约 2 分钟' };
 
   var ID_CHOICES = [
     { key: 1, v: 'cond', label: '条件（假名）', sub: '写的是假名' },
@@ -53,6 +53,7 @@
   var DATA = null;
   var ITEMS = [];
   var DAK_ITEMS = [];
+  var NAT_ITEMS = [];
   var S = null;
   var view = { screen: 'boot', task: null };
   var sync = { sending: false, lastOk: 0, error: '', retryTimer: null };
@@ -178,10 +179,14 @@
     }
   }
 
-  function taskItems(t) { return t === 'dak' ? DAK_ITEMS : ITEMS; }
+  function taskItems(t) {
+    if (t === 'dak') return DAK_ITEMS;
+    if (t === 'nat') return NAT_ITEMS;
+    return ITEMS;
+  }
   function totalOf(t) { return taskItems(t).length; }
   function answeredCount(t) { return S ? S.answers[t].length : 0; }
-  function totalAll() { return ITEMS.length * 2 + DAK_ITEMS.length; }
+  function totalAll() { return ITEMS.length + DAK_ITEMS.length + NAT_ITEMS.length; }
   function answeredAll() {
     return TASKS.reduce(function (n, t) { return n + answeredCount(t); }, 0);
   }
@@ -400,7 +405,7 @@
       '<p class="lead">你会看到 AI 生成的四字熟语图片，需要判断红框标出的那一格“像哪个字”、' +
       '浊点是否完整，以及两张图写下来的自然度。凭第一感觉作答即可，没有标准答案。</p>' +
       '<div class="facts">' +
-        '<div><b>40–50 分钟</b><span>可分多次完成，进度自动保存</span></div>' +
+        '<div><b>约 25–30 分钟</b><span>可分多次完成，进度自动保存</span></div>' +
         '<div><b>3 个任务</b><span>身份 · 浊点 · 自然度</span></div>' +
         '<div><b>匿名</b><span>无需登录，不要求姓名</span></div>' +
       '</div>' +
@@ -1073,6 +1078,11 @@
       DATA = data;
       ITEMS = (data.items || []).slice().sort(function (a, b) { return a.idx - b.idx; });
       DAK_ITEMS = ITEMS.filter(function (x) { return x.dakuten; });
+      var byIdx = {};
+      ITEMS.forEach(function (x) { byIdx[x.idx] = x; });
+      var natIdx = Array.isArray(data.nat_idx) ? data.nat_idx : ITEMS.map(function (x) { return x.idx; });
+      NAT_ITEMS = natIdx.map(function (i) { return byIdx[i]; }).filter(Boolean);
+      if (!NAT_ITEMS.length) NAT_ITEMS = ITEMS.slice();
       if (!ITEMS.length) throw new Error('items.json 为空');
       S = load();
       if (!S) {

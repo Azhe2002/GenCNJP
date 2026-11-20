@@ -5,7 +5,7 @@
  * 千万不要把 service_role key 写进这里。
  */
 window.SURVEY_CONFIG = {
-  version: "1.1.0",
+  version: "1.2.0",
   studyName: "MIXIDIOM-69 字形保真人工标注",
 
   // 联系方式（做完可改成邮箱；留空则用 GitHub 主页）
