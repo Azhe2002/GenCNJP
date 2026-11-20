@@ -12,13 +12,13 @@ window.SURVEY_CONFIG = {
   contactEmail: "",
   contactUrl: "https://github.com/Azhe2002",
 
-  // 建好 Supabase 项目后填入，例如：
-  //   supabaseUrl: "https://abcdefghijkl.supabase.co",
-  //   supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+  // 建好 Supabase 项目后填入。两种 key 都支持：
+  //   旧版 anon public: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...."
+  //   新版 publishable: "sb_publishable_..."
   // 留空时页面仍可作答，结果保存在本机并可在结束页下载；
   // 填好后重新部署即可自动上传。
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://pzgtwmiilmenzfevfkgl.supabase.co",
+  supabaseAnonKey: "sb_publishable_5uwJpH4LbqpCtQPBLXi2tQ_dg6kSlZK",
 
   // 每答多少题额外上传一个进度快照（答卷完成时总会再传一次）
   syncEveryN: 15
