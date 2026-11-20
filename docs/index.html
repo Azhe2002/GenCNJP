@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>字形保真标注 · MIXIDIOM-69</title>
+<meta name="description" content="中日混排字形保真研究：在线人工标注（身份、浊点、自然度）。匿名参与，约 40–50 分钟，可分段完成。">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23b3261e'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%23fff'%3E%E5%AD%97%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./" aria-label="字形保真标注首页">
+      <span class="mark" aria-hidden="true">字</span>
+      <span class="brandtext">字形保真标注</span>
+      <span class="badge">学术研究</span>
+    </a>
+    <div class="topstatus" id="topStatus" aria-live="polite"></div>
+  </div>
+</header>
+
+<main class="app" id="app">
+  <noscript>
+    <div class="card"><h2>需要启用 JavaScript</h2>
+    <p class="muted">本标注页面依赖 JavaScript 运行，请在浏览器中启用后刷新。</p></div>
+  </noscript>
+</main>
+
+<footer class="sitefoot">
+  <div class="sitefoot-inner">
+    <span>MIXIDIOM-69 · 匿名人工标注</span>
+    <span class="sep">·</span>
+    <a id="footContact" href="https://github.com/Azhe2002" target="_blank" rel="noopener">联系研究者</a>
+    <span class="sep">·</span>
+    <span>数据仅用于学术研究的汇总分析</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="zoom" id="zoom" hidden>
+  <button class="zoombg" id="zoomClose" aria-label="关闭放大图"></button>
+  <img id="zoomImg" alt="放大的题目图片">
+  <p class="zoomhint">点击任意处关闭</p>
+</div>
+
+<script src="./assets/config.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>
